@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de compras en GO</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<div class="container-fluid"  style="height: 100vh">
+    <div class="row" style="background-color: royalblue;">
+        <div class="col-12">
+            <div style="background-color: black; padding: 20px;" >
+                <h4 style="color: white">Compra a tu gusto!</h4>
+                <img src="./src/img/Screenshot_1.png" alt="">
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-9">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+
+                    <div class="card-group">
+                        <div class="card">
+                            <img src="https://images-na.ssl-images-amazon.com/images/I/71WX6wVepIL._SY355_.jpg" class="card-img-top" style="width: 100%; height: 300px;" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Controlador inalámbrico Xbox ONE</h5>
+                                <p class="card-text">US$26.99</p>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">
+                                    <button type="button" class="btn btn-primary" id="min_xboxControl"> - </button>
+                                    <label id="xbox_items_label">0</label>
+                                    <button type="button" class="btn btn-primary" id="more_xboxControl">+</button>
+
+                                </small>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="https://http2.mlstatic.com/funko-pop-avengers-infinity-war-thanos-D_NQ_NP_960779-MLM27695013111_072018-F.jpg" class="card-img-top" style="width: 100%; height: 300px;" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Funko Thanos - Infinity War x POP!</h5>
+                                <p class="card-text">US$25.99</p>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">
+                                    <button type="button" class="btn btn-primary" id="min_thanos"> - </button>
+                                    <label id="thanos_items_label">0</label>
+                                    <button type="button" class="btn btn-primary" id="max_thanos">+</button>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="https://m.media-amazon.com/images/I/91D-zq7R8NL._AC_UL480_FMwebp_QL65_.jpg" style="width: 100%; height: 300px;" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Mattel UNO Original Juego de cartas de juego</h5>
+                                <p class="card-text">US$8.93</p>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary" id="min_uno"> - </button>
+                                <label id="uno_items_label">0</label>
+                                <button type="button" class="btn btn-primary" id="max_uno">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-3" id="box-store" style="background-color: #1d93d3;">
+
+            <div class="card bg-light mb-3" style="width:100%; margin-top: 20px;">
+                <div class="card-header">TOTAL</div>
+                <div class="card-body">
+                    <h5 class="card-title">Carrito de compra</h5>
+                    <div id="container">
+
+                    </div>
+                    <p class="card-text">total $ <label id="total"></label></p>
+
+                    <button type="button" class="btn btn-success" id="buyButton">Comprar</button>
+
+                </div>
+            </div>
+            <div>
+                <h3>
+                    &copy;2019 Reto Geek
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+   $(function() {
+
+       let data = {
+
+           xboxControl:{
+               name:"Control de XBOX",
+               quantity:0,
+               product:1,
+               price:26.99,
+               user_id:1
+           },
+           thanos:{
+               name:"Funko Thanos",
+               quantity:0,
+               product:2,
+               user_id:1,
+               price:25.99
+           },
+           uno:{
+               name:"Mattel UNO Original",
+               quantity:0,
+               product:3,
+               user_id:1,
+               price:8.93
+           },
+
+       }
+       let xboxControl = $("#xbox_items_label");
+       let thanos = $("#thanos_items_label");
+       let uno = $("#uno_items_label");
+       let moreXboxControl = $("#more_xboxControl");
+       let moreThanos = $("#max_thanos");
+       let moreUno = $("#max_uno");
+       let minXboxControl = $("#min_xboxControl");
+       let minUno = $("#min_uno");
+       let minThanos = $("#min_thanos");
+       let total = $("#total");
+       let totalContainer = $("#container");
+       let buyButton = $("#buyButton");
+
+       moreThanos.click(function() {
+
+           data.thanos.quantity = data.thanos.quantity + 1;
+           thanos.text(data.thanos.quantity.toString());
+           updateTotal();
+
+       });
+
+       moreXboxControl.click(function() {
+
+           data.xboxControl.quantity = data.xboxControl.quantity + 1;
+           xboxControl.text(data.xboxControl.quantity.toString());
+           updateTotal();
+
+       });
+
+       minXboxControl.click(function () {
+
+           if( data.xboxControl.quantity > 0 ){
+
+               data.xboxControl.quantity = data.xboxControl.quantity - 1;
+               xboxControl.text(data.xboxControl.quantity.toString());
+               updateTotal();
+
+           }
+
+
+       })
+
+       minThanos.click(function () {
+
+           if( data.thanos.quantity > 0 ){
+
+               data.thanos.quantity = data.thanos.quantity - 1;
+               thanos.text(data.thanos.quantity.toString());
+               updateTotal();
+
+           }
+
+
+       })
+
+       moreUno.click(function() {
+
+           data.uno.quantity = data.uno.quantity + 1;
+           uno.text(data.uno.quantity.toString());
+           updateTotal();
+
+       });
+
+       minUno.click(function () {
+
+           if( data.uno.quantity > 0 ){
+
+               data.uno.quantity = data.uno.quantity - 1;
+               uno.text(data.uno.quantity.toString());
+               updateTotal();
+
+           }
+
+       })
+
+       buyButton.click(function(){
+
+           if( getProducts().sales.length > 0 ){
+
+               axios({
+                   method: 'post',
+                   url: '/buy',
+                   data: getProducts()
+               }).then(function( response ){
+
+                   alert("Se realizo la venta exitosamente");
+
+               }).catch(function(error){
+
+                   alert("hubo un error");
+
+               });
+
+           }
+           else{
+
+               alert("No hay nada en el carrito, no se realizo ninguna venta")
+
+           }
+
+
+       });
+
+       function getProducts(){
+
+           let products = [];
+
+           if( data.xboxControl.quantity > 0 ){
+               products.push({"product":data.xboxControl.product,"user_id":data.xboxControl.user_id,"quantity":data.xboxControl.quantity})
+           }
+           if( data.thanos.quantity > 0 ){
+               products.push({"product":data.thanos.product,"user_id":data.thanos.user_id,"quantity":data.thanos.quantity})
+           }
+           if( data.uno.quantity > 0 ){
+               products.push({"product":data.uno.product,"user_id":data.uno.user_id,"quantity":data.uno.quantity})
+           }
+
+           return {"sales":products};
+       }
+
+       function updateTotal(){
+
+           let t = data.xboxControl.quantity * data.xboxControl.price;
+           t += data.thanos.quantity * data.thanos.price;
+           t += data.uno.quantity * data.uno.price;
+           total.text(t.toString());
+
+           totalContainer.empty();
+
+           if( data.xboxControl.quantity > 0 ){
+               totalContainer.append("<p>"+data.xboxControl.name+" <label> x "+data.xboxControl.quantity+"<label/><p/>")
+           }
+           if( data.thanos.quantity > 0 ){
+               totalContainer.append("<p>"+data.thanos.name+" <label> x "+data.thanos.quantity+"<label/><p/>")
+           }
+
+           if( data.uno.quantity > 0 ){
+               totalContainer.append("<p>"+data.uno.name+" <label> x "+data.uno.quantity+"<label/><p/>")
+           }
+
+       }
+
+   });
+
+
+
+</script>
+</body>
+</html>
